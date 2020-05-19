@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+
+  <body>
+    <h5 align="center">Chat</h5>
+    <main class="container">
+      <div>
+        <div class="messages">
+          <div class="window">
+            <% for(var i = message.length-1; i >= 0 ; i--){ %>
+            <div class="textMessage">
+              <span class="name"><%= message[i].name %>:</span
+              ><span class="message"><%= message[i].message %></span>
+            </div>
+            <%}%>
+          </div>
+        </div>
+        <form action="/send" method="POST">
+          <label for="name">Введи имя:</label>
+          <input type="text" name="name" id="name" /><br />
+          <label for="name">Введи Сообщение:</label>
+          <input type="text" name="message" id="message" /><br />
+          <button class="waves-effect waves-light btn-small">Отправить</button>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      let wind = document.querySelector(".window");
+      let text = document.getElementsByClassName("textMessage");
+      let count = text.length;
+      async function check() {
+        await fetch("http://localhost:3000/getmes")
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.length > count) {
+              let ls = res.length - 1;
+              console.log(ls);
+              wind.innerHTML += `<div class="textMessage"><span class="name">${res[ls].name}:</span><span class="message">${res[ls].message}</span></div>`;
+            }
+          });
+        count = text.length;
+      }
+
+      setInterval(check, 5000);
+    </script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
